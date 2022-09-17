@@ -1,0 +1,53 @@
+<nav id="sidebar" class="sidebar">
+  <div class="sidebar-content ">
+    <a class="sidebar-brand" href="/">
+      <img class="align-middle img-fluid mr-2" alt="Avest Logo" src="/img/avest.png" width="50" height="50" />
+      <span class="align-middle">Avest Network</span>
+    </a>
+    <ul class="sidebar-nav">
+      <li class="sidebar-header">
+        Мониторинг и управление
+      </li>
+      <li class="sidebar-item {{#if isOnus}}active{{/if}}">
+        <a href="/" class="sidebar-link">
+          <i class="align-middle" data-feather="codepen"></i> <span class="align-middle">ONUs</span>
+        </a>
+      </li>
+      <li class="sidebar-item {{#if isOnusSignals}}active{{/if}}">
+        <a href="/onus/signals" class="sidebar-link">
+          <i class="align-middle" data-feather="trending-up"></i> <span class="align-middle">ONUs power</span>
+        </a>
+      </li>
+
+      {{#if isAdmin}}
+        <li class="sidebar-header">
+          Настройки
+        </li>
+        <li class="sidebar-item {{#if isSettingsOlts}}active{{/if}}">
+          <a href="/settings/olts" class="sidebar-link">
+            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Список OLT</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item {{#if isSettingsUsers}}active{{/if}}">
+          <a href="/settings/users" class="sidebar-link">
+            <i class="align-middle" data-feather="users"></i> <span class="align-middle">Пользователи</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item {{#if isSettingsLog}}active{{/if}}">
+          <a href="/settings/log" class="sidebar-link">
+            <i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Журнал ошибок</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-bottom d-none d-lg-block pt-2">
+        <div class="media p-0">
+          <img src="/img/info_placeholder.png" class="img-fluid p-3">
+        </div>
+      </div>
+    {{/if}}
+
+  </div>
+</nav>

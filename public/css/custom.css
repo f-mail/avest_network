@@ -1,0 +1,29 @@
+.table-condensed{
+    font-size: 12px;
+  }
+
+table.align-center th {
+    text-align: center;   
+}
+
+table.align-center td {
+    text-align: center;   
+}
+
+table.align-center td.align-left {
+    text-align: left;   
+}
+
+main.content {
+    padding-top: 1.25rem;
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    display: none;
+}
+
+
+

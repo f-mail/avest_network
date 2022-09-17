@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Avest Network Management Tools">
+
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+    <title>{{title}}</title>
+
+    <link href="/css/style.min.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
+</head>
+
+<body>
+    <main class="main d-flex w-100" id="root">
+        <div class="container d-flex flex-column">
+            <div class="row h-100">
+                <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+                    <div class="d-table-cell align-middle">
+
+                        <div class="text-center mt-4">
+                            <h1 class="h2">Avest Network</h1>
+                            <p class="lead">
+                                Вход в систему
+                            </p>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="m-sm-4">
+                                    
+                                        <div id="alert-login" class="alert alert-warning alert-dismissible collapse" role="alert">
+                                            <button type="button" class="close" onclick="clickCloseAlert()">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <div class="alert-message">
+                                                <strong id="alert-login-text"></strong>                                            </div>
+                                        </div>                                    
+                                    
+                                        <div class="form-group">
+                                            <label>Имя пользователя</label>
+                                            <input class="form-control form-control-lg" id="edit-name" type="text" name="name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Пароль</label>
+                                            <input class="form-control form-control-lg" id="edit-password" type="password" name="password">
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <button class="btn btn-lg btn-primary" onclick="clickLogin()">Войти</button>
+                                            <!-- <button type="submit" class="btn btn-lg btn-primary">Sign up</button> -->
+                                        </div>                                    
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+<script src="/js/app_stack.min.js"></script>
+<script src="/js/app_custom.js"></script>
+<script src="/js/login.js"></script>

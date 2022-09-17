@@ -1,0 +1,42 @@
+commit b467d38f31f957679db16c213e48e037181c32cb
+Author: vlad.men <vlad.men.mail@yandex.ru>
+Date:   Wed Aug 5 15:59:33 2020 +1100
+
+    v1.1.1
+    minor fixes
+
+commit 71dbf38017847124b451f0873d6fd725d43a365e
+Author: vlad.men <vlad.men.mail@yandex.ru>
+Date:   Wed Aug 5 15:00:44 2020 +1100
+
+    version 1.1
+    new features:
+    - background update every 5 minutes
+    - browser notification (change statuses)
+    - page's title shows number of offline onus
+    - add link opens olt's web interface
+    - add selection table's row
+    - search results views as plain table
+    - change favicon
+    - some visual enhancements
+    
+    fixes:
+    - fix mobile devices adaptation
+
+commit c788f8f302a3d7b95b4b6ed7946c96d7543d764f
+Author: vlad.men <vlad.men.mail@yandex.ru>
+Date:   Fri Jul 17 17:53:58 2020 +1100
+
+    fix reboot onu
+
+commit 27fff35b7c3352dcbe3285af165e23074e13cc04
+Author: vlad.men <vlad.men.mail@yandex.ru>
+Date:   Sat Jul 11 18:43:31 2020 +1100
+
+    merge all changes
+
+commit 762bced7f7edf84e067b7d1535ee74901ef52c69
+Author: vlad.men <vlad.men.mail@yandex.ru>
+Date:   Sun Jun 14 10:07:19 2020 +1100
+
+    Initial commit

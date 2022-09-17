@@ -1,0 +1,22 @@
+[
+	{
+		"ipAddress": "172.20.5.7",
+		"vendorId": "34592",
+		"ponAmount": 8
+	},
+	{
+		"ipAddress": "172.20.5.8",
+		"vendorId": "34592",
+		"ponAmount": 8
+	},
+	{
+		"ipAddress": "172.20.5.5",
+		"vendorId": "34592",
+		"ponAmount": "8"
+	},
+	{
+		"ipAddress": "172.20.5.6",
+		"vendorId": "34592",
+		"ponAmount": "8"
+	}
+]

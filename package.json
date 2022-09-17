@@ -1,0 +1,28 @@
+{
+  "name": "avest_network",
+  "version": "1.1.1",
+  "description": "Avest Network Web Managment Project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Vladimir Menshutkin (vlad.men.mail@ya.ru)",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^4.0.4",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.1.0",
+    "net-snmp": "^2.6.7",
+    "pm2": "^5.2.0",
+    "pureimage": "^0.2.1",
+    "sequelize": "^5.21.13"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
