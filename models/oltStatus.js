@@ -125,7 +125,7 @@ class OltsStatus {
 
     async getExtendedInfo(numOlt) {
         if (process.env.NODE_ENV == 'debug') {
-            await this.timeout(1000);
+            await this.timeout(100);
             this.status = debuggerUtils.loadJsonFromFile(`extInfo_${numOlt}.json`);            
             this.toCacheDb(numOlt);
             this.fromCacheDb();
@@ -140,7 +140,7 @@ class OltsStatus {
 
     async getPortsInfo(numOlt) {
         if (process.env.NODE_ENV == 'debug') {
-            await this.timeout(3000);
+            await this.timeout(300);
             return debuggerUtils.loadJsonFromFile(`portsInfo_${numOlt}.json`);
         }
 
@@ -173,7 +173,7 @@ class OltsStatus {
 
     async rebootOnu(numOlt, portId, onuId) {
         if (process.env.NODE_ENV == 'debug') {
-            await this.timeout(1000);            
+            await this.timeout(100);            
             return true;
         }
         
@@ -257,6 +257,15 @@ class OltsStatus {
                         if (onu.ipAddress.toString().length === 0)
                             onu.ipAddress = onuCache.ipAddress;
                     } 
+
+                    if (onuCache.lastOnline)
+                    {
+                        let lastOnline = convertUTCDateToLocalDate(onuCache.lastOnline);                       
+
+                        onu.lastOnline = lastOnline.toISOString().
+                        replace(/T/, ' ').      // replace T with a space
+                        replace(/\..+/, '');;
+                    }
                 }
             }
         }
@@ -347,6 +356,11 @@ class OltsStatus {
     timeout(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+}
+
+function convertUTCDateToLocalDate(date) {
+    var newDate = new Date(date.getTime() - date.getTimezoneOffset()*60*1000);
+    return newDate;   
 }
 
 module.exports = OltsStatus;

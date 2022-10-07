@@ -74,6 +74,8 @@ async function loadOnus(isStartPage = false) {
         }
 
         resetRefreshButton();
+        filterOfflineOnus(false);
+        showAsOneList(false);
 
     } catch(e) {
         $('#root').html(getHtmlError("400 Client error:", e.stack))
@@ -138,67 +140,133 @@ function createOnuDom(data) {
 
     //oltTabsHead
     let tabsHead = `<div class="tab" id="tab-content">
-        <ul class="nav nav-tabs" role="tablist"> `;    
-    for(let i = 0; i < data.olts.length; i++) {
-        let olt = data.olts[i];
-
-        //active tab
-        let isActive = '';
-        if (i === 0) isActive = ` active`;
-
-        //bad onus indicator
-        let isOfflineOnus = '';        
-        olt.onusBad = olt.onusBad || 0;
-        if(olt.onusBad > 0) isOfflineOnus = `[${olt.onusBad}]`;
-
-
-        let head = `<li class="nav-item" id="nav-item-${i}">
-            <a class="nav-link pb-1 pt-2 ${isActive}" href="#tab-${i+1}"
-                data-toggle="tab" role="tab">${olt.model || '[UNKNOWN_OLT_MODEL]'} (${olt.ipAddress}) 
-                    <span class="ml-1 text-danger font-weight-bold">
-                        ${isOfflineOnus}
-                    </span>
+        <ul class="nav nav-tabs" role="tablist"> `; 
+        
+    if (isShowAsOneList === false)
+    {
+        for(let i = 0; i < data.olts.length; i++) {
+            let olt = data.olts[i];
+    
+            //active tab
+            let isActive = '';
+            if (i === 0) isActive = ` active`;
+    
+            //bad onus indicator
+            let isOfflineOnus = '';        
+            olt.onusBad = olt.onusBad || 0;
+            if(olt.onusBad > 0) isOfflineOnus = `[${olt.onusBad}]`;
+    
+    
+            let head = `<li class="nav-item" id="nav-item-${i}">
+                <a class="nav-link pb-1 pt-2 ${isActive}" href="#tab-${i+1}"
+                    data-toggle="tab" role="tab">${olt.model || '[UNKNOWN_OLT_MODEL]'} (${olt.ipAddress}) 
+                        <span class="ml-1 text-danger font-weight-bold">
+                            ${isOfflineOnus}
+                        </span>
+                </a>
+                </li> `;
+            tabsHead += head;
+        }
+    }
+    else //show onu as one list
+    {
+         let head = `<li class="nav-item" id="nav-item-${i}">
+            <a class="nav-link pb-1 pt-2 active" href="#tab-${i+1}"
+                data-toggle="tab" role="tab">All ONUs                     
             </a>
             </li> `;
         tabsHead += head;
     }
-    tabsHead += '</ul> ';
     
-    //oltsTabContent
-    let tabContent = `<div class="tab-content"> `;
-    for(let i = 0; i < data.olts.length; i++) {
-        let olt = data.olts[i];
-        let tabPanel = `<div class="tab-pane ${i==0 ? 'active' : ''}" id="tab-${i+1}" role="tabpanel">
-            <div class="card" id="card-olt-${i}">
-                <div class="card-header pb-1">
-                    <span class="p-1 bg-light text-primary">
-                        <i class="align-middle mr-1 p-2 fas fa-fw fa-bolt"></i>
-                        status: ${olt.statusDesc || '[unknown]'}
-                    </span>
-                    <span class="p-1 ml-2 bg-light text-primary">
-                        <i class="align-middle mr-1 fas fa-fw fa-play-circle"></i>
-                        runtime: ${olt.runTime || '[unknown]'}
-                    </span>
-                    <span class="p-1 ml-2 bg-light text-primary">
-                        <i class="align-middle mr-1 fas fa-fw fa-external-link-alt"></i>
-                        <a class="d-inline" href='http://${olt.ipAddress}' target="_blank">web</a>
-                    </span>
+    tabsHead += '</ul> ';
 
-                </div>
-                <table class="table table-condensed align-center mb-1" id="olt-table-${i}">
-                    <thead>
-                        <tr class="tr-headers">
-                                <th style="width:10%;">ID</th>
-                                <th style="width:30%">Status</th>
-                                <th style="width:10%">Signal</th>
-                                <th class="d-none d-md-table-cell" style="width:20%">Ports</th>
-                                <th class="d-none d-md-table-cell" style="width:15%">IP</th>
-                                <th style="width:10%">Reboot</th>
-                                <th class="d-none d-md-table-cell">Edit</th>
-                        </tr>
-                    </thead>
-                    <tbody> `;
+    let tabContent = `<div class="tab-content"> `;
+    if (isShowAsOneList === false)
+    {
+        //oltsTabContent        
+        for(let i = 0; i < data.olts.length; i++) {
+            let olt = data.olts[i];
+            let tabPanel = `<div class="tab-pane ${i==0 ? 'active' : ''}" id="tab-${i+1}" role="tabpanel">
+                <div class="card" id="card-olt-${i}">
+                    <div class="card-header pb-1">
+                        <span class="p-1 bg-light text-primary">
+                            <i class="align-middle mr-1 p-2 fas fa-fw fa-bolt"></i>
+                            status: ${olt.statusDesc || '[unknown]'}
+                        </span>
+                        <span class="p-1 ml-2 bg-light text-primary">
+                            <i class="align-middle mr-1 fas fa-fw fa-play-circle"></i>
+                            runtime: ${olt.runTime || '[unknown]'}
+                        </span>
+                        <span class="p-1 ml-2 bg-light text-primary">
+                            <i class="align-middle mr-1 fas fa-fw fa-external-link-alt"></i>
+                            <a class="d-inline" href='http://${olt.ipAddress}' target="_blank">web</a>
+                        </span>
+
+                    </div>
+                    <table class="table table-condensed align-center mb-1" id="olt-table-${i}">
+                        <thead>
+                            <tr class="tr-headers">
+                                    <th style="width:10%;">ID</th>
+                                    <th style="width:30%">Status</th>
+                                    <th style="width:10%">Signal</th>
+                                    <th class="d-none d-md-table-cell" style="width:20%">Ports</th>
+                                    <th class="d-none d-md-table-cell" style="width:15%">IP / Last time online</th>
+                                    <th style="width:10%">Reboot</th>
+                                    <th class="d-none d-md-table-cell">Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody> `;
+                
+                for(let p = 0; p < olt.ports.length; p++) {
+                    for(let j = 0; j < olt.ports[p].onus.length; j++) {
+                        let onu = olt.ports[p].onus[j];  
+                        
+                        //status
+                        let htmlStatus = `class="clickable-row`;
+                        if (onu.status === 2) htmlStatus += ` bg-danger text-white`;
+                        if (onu.status === 3) htmlStatus += ` bg-warning`;
+                        htmlStatus += `"`
+
+                        let rowOnu = `<tr ${htmlStatus}>
+                            <td class="d-md-table-cell">${onu.portId}:${onu.onuId}</td>
+                            <td class="d-md-table-cell align-left" id="cell-name-${i}-${onu.portId}-${onu.onuId}">${getHtmlOnuName(onu)}</td>
+                            <td class="d-md-table-cell" id="cell-signal-${i}-${onu.portId}-${onu.onuId}">${getHtmlOnuSignal(onu)}</td>
+                            <td class="d-none d-md-table-cell" id="cell-ports-${i}-${onu.portId}-${onu.onuId}"></td>
+                            <td class="d-none d-md-table-cell align-center">${getHtmlOnuIp(onu)}</td>
+                            <td class="d-md-table-cell">${getHtmlOnuReboot(i, onu)}</td>
+                            <td class="d-none d-md-table-cell">${getHtmlOnuEdit(i, onu)}</td>                        
+                        </tr> `
+                        tabPanel += rowOnu;
+                    }
+                }
+                tabPanel += `</table></div></div> `                    
             
+            tabContent += tabPanel;
+        }
+    }
+    else //show onu as one list
+    {
+        //oltsTabContent        
+
+        let tabPanel = `<div class="tab-pane active" id="tab-0" role="tabpanel">
+        <div class="card" id="card-olt-0">                    
+            <table class="table table-condensed align-center mb-1" id="olt-table-0">
+                <thead>
+                    <tr class="tr-headers">
+                            <th style="width:10%;">ID</th>
+                            <th style="width:30%">Status</th>
+                            <th style="width:10%">Signal</th>
+                            <th class="d-none d-md-table-cell" style="width:20%">Ports</th>
+                            <th class="d-none d-md-table-cell" style="width:15%">IP</th>
+                            <th style="width:10%">Reboot</th>
+                            <th class="d-none d-md-table-cell">Edit</th>
+                    </tr>
+                </thead>
+                <tbody> `;
+
+        for(let i = 0; i < data.olts.length; i++) {
+            let olt = data.olts[i];           
+                
             for(let p = 0; p < olt.ports.length; p++) {
                 for(let j = 0; j < olt.ports[p].onus.length; j++) {
                     let onu = olt.ports[p].onus[j];  
@@ -220,11 +288,14 @@ function createOnuDom(data) {
                     </tr> `
                     tabPanel += rowOnu;
                 }
-            }
-            tabPanel += `</table></div></div> `                    
-        
-        tabContent += tabPanel;
+            } 
+        }
+
+        tabPanel += `</table></div></div> ` 
+        tabContent += tabPanel; 
     }
+    
+    
     tabContent += "</div> ";
 
     let endTabs = `</div>     
@@ -289,6 +360,11 @@ function getHtmlOnuPorts(onu) {
 }
 
 function getHtmlOnuIp(onu) {
+
+    if (onu.status === 2 && onu.lastOnline)
+    {
+        return onu.lastOnline;
+    }
     if (!onu.ipAddress) return "";
     return `<a href="http://${onu.ipAddress}"
         class="text-success" target="_blank">${onu.ipAddress}</a>`
@@ -476,8 +552,11 @@ function resetRefreshButton() {
 
 <span>
 
-<button id="btnFilterOffline" class="btn btn-danger align-middle"
-            onclick="filterOfflineOnus();">Show offline</button>
+            <button id="btnShowAsOneList" class="btn btn-danger align-middle"
+            onclick="showAsOneList(true);">Show all ONUs</button>
+
+            <button id="btnFilterOffline" class="btn btn-danger align-middle"
+            onclick="filterOfflineOnus(true);">Show offline</button>
     
     
             <button class="btn btn-primary align-middle"
@@ -488,25 +567,54 @@ function resetRefreshButton() {
 }
 
 var isShowOffline = false;
+var isShowAsOneList = false;
 
-function filterOfflineOnus() {
-    if (isShowOffline === false)
+function filterOfflineOnus(isSwitch) {
+
+    if (isSwitch === true)
+        isShowOffline = !isShowOffline;
+
+    if (isShowOffline === true)
     {
         $('tr.clickable-row').hide();
         $('tr.bg-danger').show();
         $('#btnFilterOffline').html('Show all');
         $('#btnFilterOffline').addClass("btn-info");
         $('#btnFilterOffline').removeClass("btn-danger");        
-        isShowOffline = true;
+        
     }
     else
     {
         $('tr.clickable-row').show();
         $('#btnFilterOffline').html('Show offline'); 
         $('#btnFilterOffline').addClass("btn-danger");
-        $('#btnFilterOffline').removeClass("btn-info");         
-        isShowOffline = false;
+        $('#btnFilterOffline').removeClass("btn-info");  
+        
     }
+}
+
+function showAsOneList(isSwitch)
+{
+    if (isSwitch)
+        isShowAsOneList = !isShowAsOneList;    
+
+    if (isShowAsOneList === true)
+    {        
+        $('#btnShowAsOneList').html('Group by OLT');
+        $('#btnShowAsOneList').addClass("btn-info");
+        $('#btnShowAsOneList').removeClass("btn-danger");        
+        
+    }
+    else
+    {       
+        $('#btnShowAsOneList').html('Show all ONus'); 
+        $('#btnShowAsOneList').addClass("btn-danger");
+        $('#btnShowAsOneList').removeClass("btn-info");  
+        
+    }
+
+    if (isSwitch)
+        loadOnus();
 }
 
 function convertOnuMacShort(mac) {
@@ -596,4 +704,5 @@ setInterval(() => {
         loadOnus(false);
     },
     1000 * 60 * 5);
+    
 

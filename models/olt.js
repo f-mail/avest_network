@@ -1,6 +1,7 @@
 const SnmpHelper = require('../utils/snmp');
 const Onu = require('./onu');
 const logger = require('../utils/logger');
+const OnuDb = require('./db_onu');
 
 class Olt {
     constructor(ipAddress, vendorId, ponAmount) {
@@ -86,6 +87,37 @@ class Olt {
                 if (onusStatus[j] == 0) continue;
                 let _onu = new Onu(i, j+1, onusStatus[j]);
                 this.ports[i-1].onus.push(_onu);
+
+                //update last online date
+                if (onusStatus[j] == 1)
+                {
+                    const _onuCandidate = await OnuDb.findOne({where : {
+                        ipOlt: this.ipAddress,
+                        portId: this.ports[i-1].portId,
+                        onuId: _onu.onuId
+                    }});
+
+                    if (!_onuCandidate) {
+                        const _onuCreate = await OnuDb.create({
+                        ipOlt: this.ipAddress,
+                        portId: this.ports[i-1].portId,
+                        onuId: _onu.onuId,                        
+                        lastStatus: _onu.status,
+                        lastOnline: new Date()                        
+                        });                        
+                    }
+                    else {
+                        const _onuUpdate = await OnuDb.update({
+                            lastOnline: new Date(),  
+                            lastStatus: _onu.status,                            
+                        },
+                        { where: {
+                            ipOlt: this.ipAddress,
+                            portId: this.ports[i-1].portId,
+                            onuId: _onu.onuId, 
+                        }})    
+                    }
+                }
             }
         }
         
@@ -335,7 +367,7 @@ class Olt {
             return 1;
         else
             return 0;        
-    }
+    }    
 }
 
 module.exports = Olt;

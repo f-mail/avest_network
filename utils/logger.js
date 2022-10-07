@@ -18,7 +18,7 @@ module.exports = {
         var stats = fs.statSynch(filePath);
         var fileSizeInBytes = stats.size;
         if (fileSizeInBytes > (1024 * 1024))
-            fs.unlinkSync(filePath)
+            fs.writeFile(filePath, msg, (err) => {});
 
         fs.appendFile(filePath, msg, (err) => {});
     },
