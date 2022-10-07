@@ -13,7 +13,14 @@ module.exports = {
         if (!fs.existsSync(path.join(process.cwd(), "logs"))){
             fs.mkdirSync(path.join(process.cwd(), "logs"));
         }
-        fs.appendFile(path.join(process.cwd(), "logs", "errors.log"), msg, (err) => {});
+        
+        var filePath = path.join(process.cwd(), "logs", "errors.log");
+        var stats = fs.statSynch(filePath);
+        var fileSizeInBytes = stats.size;
+        if (fileSizeInBytes > (1024 * 1024))
+            fs.unlinkSync(filePath)
+
+        fs.appendFile(filePath, msg, (err) => {});
     },
 
     getLog : function() {

@@ -472,8 +472,41 @@ function hideSearchContent() {
 }
 
 function resetRefreshButton() {
-    $('#loading-placeholder').html(`<button class="btn btn-primary align-middle"
-            onclick="this.disabled=true; loadOnus(false);">Refresh</button>`)
+    $('#loading-placeholder').html(`
+
+<span>
+
+<button id="btnFilterOffline" class="btn btn-danger align-middle"
+            onclick="filterOfflineOnus();">Show offline</button>
+    
+    
+            <button class="btn btn-primary align-middle"
+            onclick="this.disabled=true; loadOnus(false);">Refresh</button>
+            
+            </span>
+            `)
+}
+
+var isShowOffline = false;
+
+function filterOfflineOnus() {
+    if (isShowOffline === false)
+    {
+        $('tr.clickable-row').hide();
+        $('tr.bg-danger').show();
+        $('#btnFilterOffline').html('Show all');
+        $('#btnFilterOffline').addClass("btn-info");
+        $('#btnFilterOffline').removeClass("btn-danger");        
+        isShowOffline = true;
+    }
+    else
+    {
+        $('tr.clickable-row').show();
+        $('#btnFilterOffline').html('Show offline'); 
+        $('#btnFilterOffline').addClass("btn-danger");
+        $('#btnFilterOffline').removeClass("btn-info");         
+        isShowOffline = false;
+    }
 }
 
 function convertOnuMacShort(mac) {
